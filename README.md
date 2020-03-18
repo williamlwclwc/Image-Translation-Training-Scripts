@@ -5,3 +5,5 @@
   * The models were trained on Google Colab with GPUs.
   
   * The output images during training may be hidden if you are not open the notebooks in Colab, but you can still open the html files on your browser to view the outputs locally.
+  
+  * The repo of the Webapp GUI of this project is on <https://github.com/williamlwclwc/Image-Translation-Webapp-Demo>
