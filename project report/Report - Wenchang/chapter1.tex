@@ -1,0 +1,283 @@
+\chapter{Introduction}
+\label{cha:intro}
+This chapter contains a brief introduction to the problem of image-to-image translation,
+deep learning and Generative Adversarial Networks. General ideas of these subjects
+are needed for the reader to understand the more complicated concepts introduced in the later
+chapters.
+
+\section{Image-to-Image Translation}
+\subsection{Definition}
+Many challenges in computer vision and machine learning can be regarded as “translating” an 
+input image into a corresponding output image. Just as a concept may be expressed in either 
+English or Chinese, a scene may be rendered as an RGB image, a gradient field, an edge map, 
+a segmentation map, etc. In analogy to automatic language translation, we cite the definition
+of automatic image translation from Isola et al. \cite{pix2pix2016}: tasks of translating one 
+possible representation of a scene into another. Researchers have solved some kinds of image 
+translation using separate, special-purpose machinery(e.g. style transfer\cite{gatys2015neural}),
+even if the settings of these problems are always the same: predict pixels from pixels.
+The models this report discuss (originated from \cite{pix2pix2016})
+make using one common framework for all these problems possible.
+In this project, we will focus on translating 
+semantic segmentation maps into photorealistic images but you can apply these approaches on
+other image translation problems.
+
+\subsection{Segmentation Maps}
+In computer vision, image segmentation is often needed in order to simplify or change 
+the representation of an image into something that is more meaningful and easier to analyze, 
+and a lot of deep learning algorithms have been invented to do semantic labelling. Therefore,
+the data this project needs is easy to acquire.
+
+Segmentation maps are also known as semantic label maps, which is a set segments that
+collectively cover the entire image. Each of the pixels in a region are similar with 
+respect to the semantic of the image and each region is assigned with a different 
+color and a semantic label.
+
+The following is an example segmentation map image, where each color represent one type of object:
+\begin{figure}
+    \begin{center}
+    \includegraphics[width=8cm]{figures/seg-map-eg}
+    \end{center}
+    \caption{A Segmentation Map}
+    \label{fig:segmentation-map-example}
+\end{figure}
+
+\subsection{Applications}
+The translation of photorealistic images from sketches is very useful once the technology is 
+mature enough for commercial applications. Designers could get a fast preview of 
+their work not by imagination, but with vivid photorealistic images. For example, 
+game designers can preview the scene, items, or characters they design vividly by drawing 
+just sets of color blocks or edges. Besides, this technology provides opportunities for 
+people who are not good at art to create their own masterpieces.
+
+
+\section{Deep Learning}
+Deep learning is part of the broader family of machine learning algorithms, based on
+artificial neural networks and representation learning(i.e. automatically discover 
+representations needed for feature detection or classification from raw data). Learning
+can be supervised, semi-supervised, or unsupervised. Deep learning approaches have widely
+been utilized in fields including computer vision, natural language processing, 
+audio recognition, text filtering, machine translation, image analysis, drug design, etc., 
+where they perform comparably to and in some cases better than human experts.  
+
+\subsection{Neural Networks}
+Artificial neural networks(ANN) are computing systems vaguely inspired by the biological 
+neural networks that constitute animal brains. Neural networks used in deep learning 
+can be regarded as a parametric approximation function that can map the input A into output
+B with parameters $\theta$ i.e. $f_{\boldsymbol{\theta}}: A \rightarrow B$. The mapping 
+function can gradually get optimized by updating its parameters through raw data and back 
+propagation algorithms. 
+
+The multi-layer architecture of neural networks can achieve complex mappings by composing 
+multiple but simple non-linear functions together.
+In neural network implementations, the input “signal” will pass into each neuron through
+connection edges, the output of each neuron is computed by some non-linear function of 
+the sum of its inputs, typically, neurons are aggregated into layers and the “signals”
+travel from the first input layer to the last output layer to produce the final results.
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=8cm]{figures/nn-structure}
+    \end{center}
+    \caption{Neural Network Structure}
+    \label{fig:neural-network-structure}
+\end{figure}
+
+\subsection{Activation Functions}
+The activation function of a node(i.e. neuron) in neural networks defines the output of that node 
+given an input or set of inputs. Note that only non-linear activation functions allow such networks 
+to compute complex mappings, if we do not use activation function or use linear activation function,
+no matter how many layers we have, we can only result in getting linear mapping functions.
+
+The activation functions this project uses are the following:
+\begin{itemize}
+    \item Rectified Linear Unit(ReLU)
+    
+    The Rectified Linear Unit is one of the simplest and most commonly used activation functions 
+    in the last few years, it computes the function: $f(x)=\max(0,x)$. 
+    This activation function is just threshold at zero, which is much simpler than tanh or sigmoid, 
+    and it was found to greatly accelerate the convergence of gradient descent compared to other 
+    activation functions including tanh or sigmoid. However, it does has a disadvantage of being fragile
+    during training, i.e. the ReLU units can irreversibly die and forever be zero during training since 
+    they can get knocked off the data manifold. 
+    \begin{figure}[H]
+        \begin{center}
+        \includegraphics[width=5cm]{figures/relu}
+        \end{center}
+        \caption{Rectified Linear Unit(ReLU) Activation Function}
+        \label{fig:ReLU}
+    \end{figure}
+    \item Leaky Rectified Linear Unit(Leaky ReLU)
+    
+    Leaky ReLUs are one type of approach trying to fix the "dying ReLU" problem. Instead of just threshold 
+    at zero, it computes: $f(x)=1(x<0)(\alpha x)+1(x>=0)(x)$, where $\alpha$ is a small constant. Some report 
+    leaky ReLUs are effective but the reuslts are necessarily consistent.
+    \begin{figure}[H]
+        \begin{center}
+        \includegraphics[width=5cm]{figures/leakyrelu}
+        \end{center}
+        \caption{Leaky ReLU Activation Function}
+        \label{fig:Leaky ReLU}
+    \end{figure}
+    \item Hyperbolic Tangent(tanh)
+    
+    The tanh activation function squashes a real-valued number to the range of [-1, 1], this activation
+    saturates but is zero-centered so that it can be regarded as a scaled and more desirable sigmoid 
+    activation function in practice.
+    \begin{figure}[H]
+        \begin{center}
+        \includegraphics[width=5cm]{figures/tanh}
+        \end{center}
+        \caption{Hyperbolic Tangent Activation Function}
+        \label{fig:tanh}
+    \end{figure}
+    
+\end{itemize}
+
+\subsection{Backpropagation}
+Backpropagation(BP) is a widely used algorithm for training neural networks for
+supervised learning. While training a neural network, there will be a loss function
+$L$ describing how well the current approximation $f_{\boldsymbol{\theta}}$ approximates
+the correct mapping function by calculate the differences between the output from the 
+neural network and the output from the training dataset. Then backpropagation algorithm 
+will try to approximate the correct mapping function by continuing minimizing the loss function, 
+this can be done by computing the gradients of the loss function with respect to 
+each weight from each pair of input-output data by the chain rule, 
+computing the gradient one layer at a time, iterating backward from the last layer to 
+the first(in order to avoid redundant computation) and update every parameter 
+${\boldsymbol{\theta}_{i}}$ using 
+$\boldsymbol{\theta}_{i} \leftarrow \boldsymbol{\theta}_{i}-\alpha \frac{\partial L}{\partial \boldsymbol{\theta}_{i}}$
+where $\alpha(>0)$ is the learning rate and $\frac{\partial L}{\partial \boldsymbol{\theta}_{i}}$ is the partial
+derivative(i.e. gradient). Theoretically, the gradient has the direction away from the minimal point, 
+so each time of these updates will make the neural network 
+approximate better by taking a little step in the opposite direction of the gradient, this idea 
+of minimizing the loss function is called gradient descent.
+
+\section{Convolutional Neural Network}
+\nocite{cs231n}
+Convolutional Neural Network(CNN) is a popular type of deep neural networks which commonly applied to computer
+vision related tasks. A typical Convolution block consists of a convolution layer, a pooling layer and a 
+fully-connected layer(exactly the same as regular neural network). A simple pipeline could be:
+[INPUT-CONV2D-ACTIVATION-POOLING-FC], In more detail:
+\begin{itemize}
+    \item INPUT [width, height, channels] will hold the raw pixel values of an input image, for example, for MNIST
+    would be [28, 28, 1], i.e. 28x28 resolution images with only 1 channel for black and white colors.
+    \item CONV2D is the key of convolutional neural network, the convolution
+    layer will compute the output of neurons that are connected to local regions in the input, each 
+    computing a dot product between their weights and a small region they are connected to in the input volume.
+    The shape of the output tensor will be [width, height, filters], where number of filters is a hyperparameter for our 
+    CNN layer. The convolution layer can extract related feature maps from the original images(e.g. edges, corners, etc.)
+    with appropriately optimized parameters, which is very useful for further analysis such as classification or 
+    generation. 
+    \item ACTIVATION is easy to understand, we can simply use RELU(or leaky RELU, tanh), this will not change the 
+    shape of the output tensor.
+    \item POOLING: in most cases, we will use max pooling, which is typically a downsampling operation along the 
+    spatial dimensions(width, height), and change the output tensor shape to [width/n, height/n, filters].
+    \item FC, fully-connected layer, each neuron in this kind of layer will be connected to 
+    all the numbers in the previous volume.
+    For instance, in classification task, fully-connected layer will compute the class scores 
+    resulting in the shape of [1, 1, classes], where there will be a score for each class representing 
+    how likely the image is that class.
+\end{itemize}
+In this way, CNN transforms the original image from the pixel values to encoded feature maps or classification 
+class scores. Note that the reverse version of CNN called CNN transpose can decode feature maps back to images,
+so in our image translation task, we will first use CNN to get the segmentation map into features maps, and then
+use CNN transpose to get the feature maps to photorealistic images.
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=8cm]{figures/convnet}
+    \end{center}
+    \caption{Example CNN Task}
+    \label{fig:CNN}
+\end{figure}
+
+\subsection{Residual Blocks}
+A traditional view of deep learning is that using more layers not necessarily results in better 
+performance, in fact, simply stacking too many CNN blocks has been shown to cause a negative effect
+since the gradient can easily shrink to zero. However, the ResNet with residual blocks brought by He et al. 
+\cite{he2015deep} has eliminated this problem. The residual block skip connects between layers which adds
+the output from previous layers $x$ to the output of stacked layers $F(x)$, in this way, even if something wrong
+happens to the stacked deeper layers output(e.g. gradient vanishing), the network is still able to learn the 
+identity output from the previous output. Therefore, residual blocks guarantee us to get results no worse than
+a shallow network, and when this apply to CNN, a even deeper CNN can be more powerful for computer vision tasks.
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=8cm]{figures/resnet}
+    \end{center}
+    \caption{Structure of Residual Layer}
+    \label{fig:Res-structure}
+\end{figure}
+
+\section{Batch Normalization}
+Batch Normalization(BN) is a popular technique proposed by Ioffe and Szegedy \cite{ioffe2015batch} recently 
+which alleviates a lot of headaches with properly initializing neural networks by forcing 
+the activations throughout a network 
+to take on a unit gaussian distribution at the beginning of the training. 
+In deep learning, a layer could supply the next layer inputs with a high varience and a mean value far from zero,
+to fix this problem, BN process every data with equation:
+$$\hat{x}_{i}=\frac{x_{i}-\mu}{\sqrt{\sigma^{2}+\epsilon}} \text { and } y_{i}=\gamma \hat{x}_{i}+\beta$$
+Where $x_{i}$ is an activation for the $i^{th}$ example in the minibatch and $\hat{x}_{i}$ is the output after 
+the process, $\mu$ and $\sigma^{2}$ are the mean vlaue and variance of the activation over the batch, and
+$\gamma$ and $\beta$ are trainable parameters.
+
+In practice, we usually insert the BN layer between FC and non-linearities.
+It has been shown that BN can make networks more robust to bad 
+initialization. In addition, BN can be interpreted as doing preprocessing at every layer of a network, but 
+integrated into the network itself in a differentiable manner, which is why BN is widely used nowadays.
+For more details, please check the referenced paper \cite{ioffe2015batch}.
+
+\section{Generative Adversarial Network}
+Generative Adversarial Network(GAN) is one kind of deep learning approach originated from 
+Goodfellow et al. \cite{goodfellow2014generative}. The idea of GAN is inspired from 
+game theory: two neural networks contest against each other in a game(i.e. the training
+process of deep learning), where one generator network tries to generate fake images while the 
+other discriminator network tries to identify whether an image is real or fake. 
+GAN models can learn
+a loss that tries to classify if the output image is real or fake, while simultaneously training
+a generative model to minimize this loss.
+One advantage 
+that GAN is more powerful than traditional CNN approach on image translation tasks is that 
+GAN can produce clearer results for blurry images look obviously fake. Furthermore, we need 
+expert knowledge and carefully designed loss function for traditional CNN models, while we 
+only need to specify a high-level objective for GAN models: make the output looks like real, and then 
+automatically learn a loss function for satisfying this goal, which is much more desirable.
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=8cm]{figures/GANs}
+    \end{center}
+    \caption{Structure of GANs}
+    \label{fig:GANs-structure}
+\end{figure}
+\subsection{Conditional Generative Adversarial Network}
+Conditional Generative Adversarial Network(cGAN) is a special kind of GAN whose input 
+of the generator is not random noises, but send in a condition image instead, the networks will learn 
+to adapt and adjust their parameters to these additional inputs. For conventional GAN models, 
+only the input noise can influence the output, however, for cGAN models, the conditional image can 
+also influence the results. In image translation tasks, the encoded segmentation map is the condition 
+we apply to the GAN model. Both pix2pix\cite{pix2pix2016} and pix2pixHD\cite{wang2018pix2pixHD} use 
+this kind of GAN model.
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=8cm]{figures/cGANs}
+    \end{center}
+    \caption{Structure of conditional GANs}
+    \label{fig:cGANs-structure}
+\end{figure}
+
+\section{Impact of COVID-19}
+I decided to go back to Beijing after my presentation of 3rd year project on 16th March, my flight arrived at Xi'an,
+China at 23rd March, I had a low fever and was sent to a hospital for further checks, and fortunately, I am OK. 
+After that, I went to quarantine for 14 days at a hotel in Xi'an, and then traveled back to Beijing and 
+self-isolate for another 14 days at home according to the policies from the government. Generally speaking, I 
+had quarantine for a month before I can work on my work wholeheartedly. Fortunately, I finished my demonstartion 
+before I left and the deadlines of 3rd year project and other courseworks has been extended.
+
+% Everything below here is commented material which is used by the
+% emacs tex support system called auctex. If you're not an emacs user
+% you can safely ignore it. If you do use emacs you should take a look
+% at the local emacs or LaTeX WWW pages for more on emacs support for
+% LaTeX.
+
+% Local Variables:
+% mode: latex
+% TeX-master: "report"
+% End:
+
