@@ -10,7 +10,7 @@ results evaluation.
 \section{Image-to-Image Translation with cGAN}
 Dealing Image-to-Image translation tasks with GANs originated from Isola et al.\cite{pix2pix2016}
 which tries to develop a common framework for all “predict pixels from pixels” problems with 
-conditional GANs, which shows the ability of generating decent $256 \times 256$ resolution images. 
+conditional GANs, which shows the ability to generate decent $256\times256$ resolution images. 
 
 \subsection{Objective Function}
 The objective of our model is to produce photorealistic images that is indistinguishable from the 
@@ -18,12 +18,20 @@ real images given input segmentation maps, the cGAN objective function is:
 $$\mathcal{L}_{c G A N}(G, D)=\mathbb{E}_{x, y}[\log D(x, y)]+\mathbb{E}_{x, z}[\log (1-D(x, G(x, z))]$$
 where the generator G tries to minimize the cGAN loss against an adversarial discriminator D that 
 tries to maximize it, i.e. $G^{*}=\arg \min _{G} \max _{D} \mathcal{L}_{c G A N}(G, D)$.
+In the implementation stage, the GAN loss usually consists of a fake loss and a real loss, where 
+the fake loss represents how well the discriminator can classify the generated images and 
+the real loss represents how well the discriminator can classify the real images. The generator 
+aims to maximize the discriminator predicting a high probability of realness for the 
+images it generates.
+
+
 The paper also claims that it is beneficial to mix the GAN objective with a conventional loss 
-such as L1 loss: $\mathcal{L}_{L 1}(G)=\mathbb{E}_{x, y, z}\left[\|y-G(x, z)\|_{1}\right]$, so the 
-final loss function of our GAN model is:
-$$G^{*}=\arg \min _{C} \max _{D} \mathcal{L}_{c G A N}(G, D)+\lambda \mathcal{L}_{L 1}(G)$$
+such as L1 loss: $\mathcal{L}_{L 1}(G)=\mathbb{E}_{x, y, z}\left[\|y-G(x, z)\|_{1}\right]$, so
+the final loss function of our GAN model is:
+$$G^{*}=\arg \min _{G} \max _{D} \mathcal{L}_{c G A N}(G, D)+\lambda \mathcal{L}_{L 1}(G)$$
 Note in this model, we do not provide noise $z$ like the traditional cGAN does, for we only need 
 deterministic results and the random noise is not found helpful in terms of the final outputs.
+
 \begin{figure}[H]
     \begin{center}
     \includegraphics[width=10cm]{figures/pix2pix-cGAN}
@@ -33,12 +41,12 @@ deterministic results and the random noise is not found helpful in terms of the 
 \end{figure}
 
 \subsection{Architecture}
-Both the generator and discriminator use modules of the form [CONV2d-BN-ReLU], the 
-generator uses a classic encoder-decoder structure where the encoder extracts the 
-feature maps from the input segmentation map, and the decoder filled the details 
+Both the generator and discriminator use modules of the form [CONV2d-BN-ReLU], 
+the generator uses a classic encoder-decoder structure where the encoder extracts
+the feature maps from the input segmentation map, and the decoder filled the details 
 to produce a photorealistic output from that feature maps. In addition, sharing 
 low-level information between input and output is helpful for many image translation
-tasks, so in order to shuttle this information across the neural network, the author
+tasks. So in order to shuttle this information across the neural network, the author
 adds skip connections following the general structure of a “U-Net”, specifically, we
 try to connect each layer $i$ and corresponding layer $n-i$, where $n$ is the total number
 of layers, and each skip connections simply concatenates all channels at layer $i$ 
@@ -55,9 +63,10 @@ discriminator has fewer parameters, runs faster, and can be applied to larger im
 
 \subsection{Summary}
 The pix2pix model does not require a lot of computation resources, one can easily 
-achieve similar results on Google Colab. I ran the official tutorial of image 
-translation from Tensorflow2.0 web page, and here are some example outputs after 100
-epochs of training on facade dataset\cite{Tylecek13}:
+achieve similar results on Google Colab. I ran the official tutorial 
+\cite{tf-pix2pix-tutorial} of image translation from Tensorflow2.0 web page, 
+and here are some example outputs after 
+100 epochs of training on facade dataset\cite{Tylecek13}:
 \begin{figure}[H]
     \begin{center}
     \includegraphics[width=12cm]{figures/pix2pix-output}
@@ -68,12 +77,12 @@ epochs of training on facade dataset\cite{Tylecek13}:
 
 The pix2pix model can achieve decent results with limited computation resources on 
 small datasets such as the facade dataset. However, it still cannot produce very
-clear textures or high resolution photorealistic images.
+clear textures or high-resolution photorealistic images.
 
 \section{State-of-the-art Model — Pix2pixHD}
 Pix2pixHD\cite{wang2018pix2pixHD} is the upgraded version of pix2pix brought by 
-Nvidia which can generate high resolution images. In the paper they successfully 
-generate $2048 \times 1024$ resolution images using the Cityscapes benchmark dataset
+Nvidia which can generate high-resolution images. In the paper they successfully 
+generate $2048\times1024$ resolution images using the Cityscapes benchmark dataset
 \cite{Cordts2016Cityscapes}. The pix2pixHD model is still based on conditional GAN, but
 it makes improvements on the generator, the discriminator, and the loss function.
 
@@ -81,8 +90,8 @@ it makes improvements on the generator, the discriminator, and the loss function
 Generator G consists of two generators, we term G1 as the global generator and G2 as 
 the local enhancer. The global generator plays the similar role as the pix2pix model 
 which is basically an encoder-decoder generator with residual blocks that can output 
-lower resolution($1024 \times 512$) images, and the local enhancer will augment the 
-output images to a higher resolution, e.g. $2048 \times 1024$. Both the global generator 
+lower resolution($1024\times512$) images, and the local enhancer will augment the 
+output images to a higher resolution, e.g. $2048\times1024$. Both the global generator 
 and local enhancer consist of convolution blocks, residual blocks, and transposed convolution blocks,
 we named them $G_{1}^{(c)}$, $G_{1}^{(r)}$, $G_{1}^{(t)}$ and $G_{2}^{(c)}$, $G_{2}^{(r)}$, 
 $G_{2}^{(t)}$ respectively. In order to integrate the global generator and local enhancer, 
@@ -110,7 +119,7 @@ respectively. $D_{1}$, $D_{2}$ will deal with the real and synthesized images by
 while $D_{3}$ will deal with the original images. The discriminator that operates at the finest 
 scale will focus on the details of an image, while the discriminator that operates at the largest 
 scale will have the largest receptive field, discriminating the image with a global view. In 
-implementation, we can simply add up the three discriminators' objective functions, which makes 
+implementation stages, we can simply add up the three discriminators' objective functions, which makes 
 the learning problem to be:
 $$\min _{G} \max _{D_{1}, D_{2}, D_{3}} \sum_{k=1,2,3} \mathcal{L}_{\mathrm{GAN}}\left(G, D_{k}\right)$$
 
@@ -138,9 +147,9 @@ or including VGG loss:
 $$\min _{G}\left(\left(\max _{D_{1}, D_{2}, D_{3}} \sum_{k=1,2,3} \mathcal{L}_{\mathrm{GAN}}\left(G, D_{k}\right)\right)+\lambda\sum_{k=1,2,3} \mathcal{L}_{\mathrm{FM}}\left(G, D_{k}\right) + \lambda \sum_{i=1}^{N} \frac{1}{M_{i}}\left[\left\|F^{(i)}(\mathbf{x})-F^{(i)}(G(\mathbf{s}))\right\|_{1}\right]\right)$$
 
 \section{State-of-the-art Model — SPADE}
-Spatially-adaptive (DE)normalization(SPADE)\cite{park2019SPADE} is another upgraded image-to-image 
+Spatially-adaptive (DE)normalization(SPADE) \cite{park2019SPADE} is another upgraded image-to-image 
 translation model brought by Nvidia, previous designs including pix2pix \cite{pix2pix2016} and 
-pix2pixHD \cite{wang2018pix2pixHD} are based on cGAN structure, which directly feed the semantic 
+pix2pixHD \cite{wang2018pix2pixHD} are based on cGAN structure, which directly feeds the semantic 
 layout as input to the generator network, then the segmentation map is processed through stacks 
 of convolution, batch normalization, residual, non-linearity layers. The paper claims that 
 some semantic information get removed by normalization layers, therefore, they proposed a new 
@@ -152,7 +161,7 @@ The SPADE block is the key of SPADE generator, similar to batch normalization, t
 normalized in the channel-wise manner by the following formula:
 $$\hat{x}_{i}=\frac{x_{i}-\mu}{\sqrt{\sigma^{2}+\epsilon}} \text { and } y_{i}=\gamma \hat{x}_{i}+\beta$$
 Where $x_{i}$ is an activation for the i-th example in the minibatch and $\hat{x}_{i}$ is the output after 
-the process, $\mu$ and $\sigma^{2}$ are the mean vlaue and variance of the activation over the batch.
+the process, $\mu$ and $\sigma^{2}$ are the mean value and variance of the activation over the batch.
 However, in SPADE block, $\gamma$ and $\beta$ are not just 
 trainable parameters anymore, they are determined by the input segmentation map, the SPADE block uses
 a two-layer convolution module that convert an image into values. Since the important parameters in
@@ -193,7 +202,7 @@ decoder part. So the structure of the SPADE generator is like the following:
     \label{fig:SPADE-generator}
 \end{figure}
 
-\subsection{Other Features}
+\subsection{VAE Encoder}
 Apart from the improvement on the generator, SPADE also make some other slight modifications
 including changing LSGAN loss in pix2pixHD with 
 Hinge loss, applying spectral normalization to the convolution layers in the discriminator.
@@ -207,7 +216,7 @@ architecture of SPADE GAN model is like the following:
     \caption{Architecture of SPADE GAN model}
     \label{fig:SPADE-architecture}
 \end{figure}
-The VAE image encoder encodes a real image to generate a mean and variance which are used 
+The VAE image encoder encodes a style image to generate a mean and variance which are used 
 to further compute the noise that is input to the decoder. The discriminator takes the 
 concatenation of the semantic label map and the output image from the generator as input 
 and tries to identify whether each image is real or fake.

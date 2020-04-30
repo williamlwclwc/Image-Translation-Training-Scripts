@@ -24,16 +24,16 @@ other image translation problems.
 \subsection{Segmentation Maps}
 In computer vision, image segmentation is often needed in order to simplify or change 
 the representation of an image into something that is more meaningful and easier to analyze, 
-and a lot of deep learning algorithms have been invented to do semantic labelling. Therefore,
+and a lot of deep learning algorithms have been invented to do semantic labeling. Therefore,
 the data this project needs is easy to acquire.
 
-Segmentation maps are also known as semantic label maps, which is a set segments that
-collectively cover the entire image. Each of the pixels in a region are similar with 
-respect to the semantic of the image and each region is assigned with a different 
+Segmentation maps are also known as semantic label maps, which is a set of segments 
+that collectively cover the entire image. Each of the pixels in a region are similar 
+with respect to the semantic of the image and each region is assigned with a different 
 color and a semantic label.
 
 The following is an example segmentation map image, where each color represent one type of object:
-\begin{figure}
+\begin{figure}[H]
     \begin{center}
     \includegraphics[width=8cm]{figures/seg-map-eg}
     \end{center}
@@ -51,6 +51,8 @@ people who are not good at art to create their own masterpieces.
 
 
 \section{Deep Learning}
+\nocite{articleDL}
+\nocite{Goodfellow-et-al-2016}
 Deep learning is part of the broader family of machine learning algorithms, based on
 artificial neural networks and representation learning(i.e. automatically discover 
 representations needed for feature detection or classification from raw data). Learning
@@ -60,12 +62,12 @@ audio recognition, text filtering, machine translation, image analysis, drug des
 where they perform comparably to and in some cases better than human experts.  
 
 \subsection{Neural Networks}
-Artificial neural networks(ANN) are computing systems vaguely inspired by the biological 
-neural networks that constitute animal brains. Neural networks used in deep learning 
-can be regarded as a parametric approximation function that can map the input A into output
+Artificial neural networks(ANN) are computing systems vaguely inspired by 
+the biological neural networks that constitute animal brains. Neural networks used in deep learning 
+can be regarded as a parametric approximation function that can map the input A into the output
 B with parameters $\theta$ i.e. $f_{\boldsymbol{\theta}}: A \rightarrow B$. The mapping 
-function can gradually get optimized by updating its parameters through raw data and back 
-propagation algorithms. 
+function can gradually get optimized by updating its parameters through raw data and 
+back propagation algorithms. 
 
 The multi-layer architecture of neural networks can achieve complex mappings by composing 
 multiple but simple non-linear functions together.
@@ -137,7 +139,7 @@ Backpropagation(BP) is a widely used algorithm for training neural networks for
 supervised learning. While training a neural network, there will be a loss function
 $L$ describing how well the current approximation $f_{\boldsymbol{\theta}}$ approximates
 the correct mapping function by calculate the differences between the output from the 
-neural network and the output from the training dataset. Then backpropagation algorithm 
+neural network and the ground-truth from a training dataset. Then the backpropagation algorithm 
 will try to approximate the correct mapping function by continuing minimizing the loss function, 
 this can be done by computing the gradients of the loss function with respect to 
 each weight from each pair of input-output data by the chain rule, 
@@ -153,27 +155,28 @@ of minimizing the loss function is called gradient descent.
 
 \subsection{Convolutional Neural Network}
 \nocite{cs231n}
-Convolutional Neural Network(CNN) is a popular type of deep neural networks which commonly applied to computer
-vision related tasks. A typical Convolution block consists of a convolution layer, a pooling layer and a 
+Convolutional Neural Network(CNN) is a popular type of deep neural networks which commonly applied to 
+the computer-vision-related tasks. 
+A typical Convolution block consists of a convolution layer, a pooling layer and a 
 fully-connected layer(exactly the same as regular neural network). A simple pipeline could be:
 [INPUT-CONV2D-ACTIVATION-POOLING-FC], In more detail:
 \begin{itemize}
     \item INPUT [width, height, channels] will hold the raw pixel values of an input image, for example, for MNIST
-    would be [28, 28, 1], i.e. 28x28 resolution images with only 1 channel for black and white colors.
-    \item CONV2D is the key of convolutional neural network, the convolution
-    layer will compute the output of neurons that are connected to local regions in the input, each 
-    computing a dot product between their weights and a small region they are connected to in the input volume.
-    The shape of the output tensor will be [width, height, filters], where number of filters is a hyperparameter for our 
+    would be [28, 28, 1], i.e. 28x28 resolution images with only one channel for the black and white colors.
+    \item CONV2D is the key of the convolutional neural network, the convolution layer 
+    will compute the output of neurons that are connected to local regions in the input, each 
+    computing a dot product between their weights and a small region they are connected to the input volume.
+    The shape of the output tensor will be [width, height, filters], where the number of filters is a hyperparameter for our 
     CNN layer. The convolution layer can extract related feature maps from the original images(e.g. edges, corners, etc.)
-    with appropriately optimized parameters, which is very useful for further analysis such as classification or 
-    generation. 
-    \item ACTIVATION is easy to understand, we can simply use RELU(or leaky RELU, tanh), this will not change the 
-    shape of the output tensor.
+    with appropriately optimized parameters, which is very useful for further analysis 
+    such as classification or generation. 
+    \item ACTIVATION is easy to understand, we can simply use RELU(or leaky RELU, tanh), this will not change 
+    the shape of the output tensor.
     \item POOLING: in most cases, we will use max pooling, which is typically a downsampling operation along the 
     spatial dimensions(width, height), and change the output tensor shape to [width/n, height/n, filters].
     \item FC, fully-connected layer, each neuron in this kind of layer will be connected to 
     all the numbers in the previous volume.
-    For instance, in classification task, fully-connected layer will compute the class scores 
+    For instance, in a classification task, a fully-connected layer will compute the class scores 
     resulting in the shape of [1, 1, classes], where there will be a score for each class representing 
     how likely the image is that class.
 \end{itemize}
@@ -211,11 +214,11 @@ Batch Normalization(BN) is a popular technique proposed by Ioffe and Szegedy \ci
 which alleviates a lot of headaches with properly initializing neural networks by forcing 
 the activations throughout a network 
 to take on a unit gaussian distribution at the beginning of the training. 
-In deep learning, a layer could supply the next layer inputs with a high varience and a mean value far from zero,
-to fix this problem, BN process every data with equation:
+In deep learning, a layer could supply the next layer inputs with a high variance and a mean value far from zero,
+to fix this problem, BN process every data with the equation:
 $$\hat{x}_{i}=\frac{x_{i}-\mu}{\sqrt{\sigma^{2}+\epsilon}} \text { and } y_{i}=\gamma \hat{x}_{i}+\beta$$
 Where $x_{i}$ is an activation for the $i^{th}$ example in the minibatch and $\hat{x}_{i}$ is the output after 
-the process, $\mu$ and $\sigma^{2}$ are the mean vlaue and variance of the activation over the batch, and
+the process, $\mu$ and $\sigma^{2}$ are the mean value and variance of the activation over the batch, and
 $\gamma$ and $\beta$ are trainable parameters.
 
 In practice, we usually insert the BN layer between FC and non-linearities.
@@ -263,12 +266,13 @@ this kind of GAN model.
 \end{figure}
 
 \section{Impact of COVID-19}
-I decided to go back to Beijing after my presentation of 3rd year project on 16th March, my flight arrived at Xi'an,
-China at 23rd March, I had a low fever and was sent to a hospital for further checks, and fortunately, I am OK. 
+I decided to go back to Beijing after finishing my presentation of the 3rd year project on 16th March, 
+my flight arrived at Xi'an, China at 23rd March, 
+I had a low fever and was sent to a hospital for further checks, and fortunately, I am OK. 
 After that, I went to quarantine for 14 days at a hotel in Xi'an, and then traveled back to Beijing and 
 self-isolate for another 14 days at home according to the policies from the government. Generally speaking, I 
-had quarantine for a month before I can work on my work wholeheartedly. Fortunately, I finished my demonstartion 
-before I left and the deadlines of 3rd year project and other courseworks has been extended.
+had quarantine for a month before I can work on my work wholeheartedly. Fortunately, I finished my demonstration 
+before I left and the deadlines of the 3rd year project and other coursework have been extended.
 
 % Everything below here is commented material which is used by the
 % emacs tex support system called auctex. If you're not an emacs user

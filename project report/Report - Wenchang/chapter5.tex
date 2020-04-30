@@ -19,12 +19,12 @@ The plan of my project is divided into four parts:
     the project and choose a relatively small but still effective dataset for my implementation.
     \item Develop GUI for the project: 
     
-    This is mainly a software engineering task, I have similar experience using Spring framework 
-    and Java for web development, so it is relatively an easy work for me to learn the similar 
+    This is mainly a software engineering task, I have a similar experience using Spring framework 
+    and Java for web development, so it is a relatively easy work for me to learn a similar 
     framework Flask for this project.
     \item Write report and record screencast: 
     
-    The original plan is to start writing report once the demonstartion(March 16th) is finished, 
+    The original plan is to start writing report once the demonstration(March 16th) is finished, 
     nevertheless, due to COVID-19 issue, I decided to travel back home on March 22nd, it took me 
     nearly a month before I can work on the report wholeheartedly.
 \end{enumerate}
@@ -46,17 +46,18 @@ The plan of my project is divided into four parts:
 \end{table}
 
 Table \ref{milestones table} includes the milestones for the project together with 
-the original planned timeline and the actual carrying out timeline. Several things 
+the originally planned timeline and the timeline that actually carried out. Several things 
 were not carried out according to the original plan, the original plan was made 
-before the arrangement of lightening talk and demonstartion, so I decided to start 
+before the arrangement of the lightening talk and demonstration, so I decided to start 
 the training after I finished the lightening talk on November 7th. Apart from that, 
-Since I have a lot of time waiting the intermediate results during training, I decided
+Since I have a lot of time waiting for the intermediate results during training, I decided
 to merge the model training phase with the GUI development phase so that I can make 
 full use of my time. For the last part of the project, I could not follow my original 
-plan due to COVID-19 outbreak, and I cannot focus on writing the report before I finishing
+plan due to COVID-19 outbreak, and I cannot focus on writing the report before finishing
 my quarantine and go back home, and fortunately, the deadline has also postponed.
 
 \section{Future Works}
+\label{sec:future work}
 Due to computational resources and development time limitations, I am not able 
 to implement all the functionalities mentioned in the paper of pix2pixHD\cite{wang2018pix2pixHD}
 and SPADE\cite{park2019SPADE}, including:
@@ -86,10 +87,10 @@ and SPADE\cite{park2019SPADE}, including:
     \nocite{zhou2016semantic}
     There are several benchmark datasets for image translation tasks including 
     Cityscapes \cite{Cordts2016Cityscapes}, ADE20K \cite{zhou2017scene}, etc. These 
-    benchmark datasets provide much more training data than the one I use for this 
-    project, which can check if the model can cope with complex scenes, i.e. test its ability of 
+    benchmark datasets provide much more training data than the one I use for 
+    this project, which can check if the model can cope with complex scenes, i.e. test its ability of 
     translating segmentation maps with various objects(e.g. there are 20 classes of objects in Cityscapes) 
-    or different kind of scenes(e.g. ADE20K contains houses scences, art galleries scenes, airports 
+    or different kind of scenes(e.g. ADE20K contains houses scenes, art galleries scenes, airports 
     scenes, etc.). 
     However, it requires more computational resources to train networks on such 
     datasets.
@@ -108,17 +109,17 @@ models with limited computational resources and compare their advantages and
 disadvantages. The experiments details have been written in jupyter notebooks 
 and the implementation of the models are also wrapped up into a web app 
 with a GUI so that people who are not familiar 
-with this topic can check the experiments process and results, and people
+with this topic can check the experiments' process and results, and people
 who have no ideas of coding and machine learning can also try image translation themselves.  
 
 During this research and development process, I not only acquired a broad range of knowledge 
 about deep learning and image translation, but also enhanced my self-learning skills. 
 At first, I only knew some basic concepts of neural networks, then I learned how convolutional 
-neural network and its variations can solve those complex computer vision tasks, how to build a 
+neural networks and its variations can solve those complex computer vision tasks, how to build a 
 simple convolutional neural network myself with the help of deep learning frameworks. I read 
 several papers regarding the image-to-image translation task, it is not easy to keep up with the 
 novel ideas at first, but after searching for explanations from blogs or YouTube channels, I 
-managed to get the ideas. Apart from that, I also practiced how to deploy the machine learning 
+managed to get the ideas. Apart from that, I also practiced how to deploy machine learning 
 models into a functional application like a web app.
 
 In my perspective, even if the current state-of-the-art models can achieve 

@@ -74,9 +74,8 @@
     \begin{center}
       {\textbf{Acknowledgements}} \\
     \end{center}
-    \begin{quotation}
-      \input{\@thanksfile}
-    \end{quotation}
+    \setlength{\parindent}{0pt}
+    \input{\@thanksfile}
   }
   \fi
 }

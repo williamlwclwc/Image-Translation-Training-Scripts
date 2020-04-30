@@ -1,0 +1,330 @@
+\chapter{Model Architectures Summary}
+The appendix includes information about the architectures of the neural networks used in 
+Pix2pixHD and SPADE model implementations.
+
+\section{Architecture of Pix2pixHD Generator}
+\begin{longtable}{llll}
+    \toprule
+                        module name &        input shape &       output\_shape &  parameters \\
+    \midrule
+                    model\_global.0 &   (1, 3, 256, 128) &   (1, 3, 262, 134) &           0 \\
+                    model\_global.1 &   (1, 3, 262, 134) &  (1, 64, 256, 128) &       9,472 \\
+                    model\_global.2 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+                    model\_global.3 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &           0 \\
+                    model\_global.4 &  (1, 64, 256, 128) &  (1, 128, 128, 64) &      73,856 \\
+                    model\_global.5 &  (1, 128, 128, 64) &  (1, 128, 128, 64) &         256 \\
+                    model\_global.6 &  (1, 128, 128, 64) &  (1, 128, 128, 64) &           0 \\
+                    model\_global.7 &  (1, 128, 128, 64) &   (1, 256, 64, 32) &     295,168 \\
+                    model\_global.8 &   (1, 256, 64, 32) &   (1, 256, 64, 32) &         512 \\
+                    model\_global.9 &   (1, 256, 64, 32) &   (1, 256, 64, 32) &           0 \\
+                    model\_global.10 &   (1, 256, 64, 32) &   (1, 512, 32, 16) &   1,180,160 \\
+                    model\_global.11 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+                    model\_global.12 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &           0 \\
+        model\_global.13.conv\_block.0 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.13.conv\_block.1 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.13.conv\_block.2 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.13.conv\_block.3 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &           0 \\
+        model\_global.13.conv\_block.4 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.13.conv\_block.5 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.13.conv\_block.6 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.14.conv\_block.0 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.14.conv\_block.1 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.14.conv\_block.2 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.14.conv\_block.3 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &           0 \\
+        model\_global.14.conv\_block.4 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.14.conv\_block.5 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.14.conv\_block.6 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.15.conv\_block.0 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.15.conv\_block.1 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.15.conv\_block.2 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.15.conv\_block.3 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &           0 \\
+        model\_global.15.conv\_block.4 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.15.conv\_block.5 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.15.conv\_block.6 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.16.conv\_block.0 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.16.conv\_block.1 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.16.conv\_block.2 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.16.conv\_block.3 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &           0 \\
+        model\_global.16.conv\_block.4 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.16.conv\_block.5 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.16.conv\_block.6 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.17.conv\_block.0 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.17.conv\_block.1 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.17.conv\_block.2 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.17.conv\_block.3 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &           0 \\
+        model\_global.17.conv\_block.4 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.17.conv\_block.5 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.17.conv\_block.6 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.18.conv\_block.0 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.18.conv\_block.1 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.18.conv\_block.2 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+        model\_global.18.conv\_block.3 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &           0 \\
+        model\_global.18.conv\_block.4 &   (1, 512, 32, 16) &   (1, 512, 34, 18) &           0 \\
+        model\_global.18.conv\_block.5 &   (1, 512, 34, 18) &   (1, 512, 32, 16) &   2,359,808 \\
+        model\_global.18.conv\_block.6 &   (1, 512, 32, 16) &   (1, 512, 32, 16) &       1,024 \\
+                    model\_global.19 &   (1, 512, 32, 16) &   (1, 256, 64, 32) &   1,179,904 \\
+                    model\_global.20 &   (1, 256, 64, 32) &   (1, 256, 64, 32) &         512 \\
+                    model\_global.21 &   (1, 256, 64, 32) &   (1, 256, 64, 32) &           0 \\
+                    model\_global.22 &   (1, 256, 64, 32) &  (1, 128, 128, 64) &     295,040 \\
+                    model\_global.23 &  (1, 128, 128, 64) &  (1, 128, 128, 64) &         256 \\
+                    model\_global.24 &  (1, 128, 128, 64) &  (1, 128, 128, 64) &           0 \\
+                    model\_global.25 &  (1, 128, 128, 64) &  (1, 64, 256, 128) &      73,792 \\
+                    model\_global.26 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+                    model\_global.27 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &           0 \\
+                    model\_global.28 &                 [] &                 [] &           0 \\
+                    model\_global.29 &                 [] &                 [] &           0 \\
+                    model\_global.30 &                 [] &                 [] &           0 \\
+                        downsample &   (1, 3, 512, 256) &   (1, 3, 256, 128) &           0 \\
+                    le\_downsample.0 &   (1, 3, 512, 256) &   (1, 3, 518, 262) &           0 \\
+                    le\_downsample.1 &   (1, 3, 518, 262) &  (1, 32, 512, 256) &       4,736 \\
+                    le\_downsample.2 &  (1, 32, 512, 256) &  (1, 32, 512, 256) &          64 \\
+                    le\_downsample.3 &  (1, 32, 512, 256) &  (1, 32, 512, 256) &           0 \\
+                    le\_downsample.4 &  (1, 32, 512, 256) &  (1, 64, 256, 128) &      18,496 \\
+                    le\_downsample.5 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+                    le\_downsample.6 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &           0 \\
+        le\_upsample.0.conv\_block.0 &  (1, 64, 256, 128) &  (1, 64, 258, 130) &           0 \\
+        le\_upsample.0.conv\_block.1 &  (1, 64, 258, 130) &  (1, 64, 256, 128) &      36,928 \\
+        le\_upsample.0.conv\_block.2 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+        le\_upsample.0.conv\_block.3 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &           0 \\
+        le\_upsample.0.conv\_block.4 &  (1, 64, 256, 128) &  (1, 64, 258, 130) &           0 \\
+        le\_upsample.0.conv\_block.5 &  (1, 64, 258, 130) &  (1, 64, 256, 128) &      36,928 \\
+        le\_upsample.0.conv\_block.6 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+        le\_upsample.1.conv\_block.0 &  (1, 64, 256, 128) &  (1, 64, 258, 130) &           0 \\
+        le\_upsample.1.conv\_block.1 &  (1, 64, 258, 130) &  (1, 64, 256, 128) &      36,928 \\
+        le\_upsample.1.conv\_block.2 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+        le\_upsample.1.conv\_block.4 &  (1, 64, 256, 128) &  (1, 64, 258, 130) &           0 \\
+        le\_upsample.1.conv\_block.5 &  (1, 64, 258, 130) &  (1, 64, 256, 128) &      36,928 \\
+        le\_upsample.1.conv\_block.6 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+        le\_upsample.2.conv\_block.0 &  (1, 64, 256, 128) &  (1, 64, 258, 130) &           0 \\
+        le\_upsample.2.conv\_block.1 &  (1, 64, 258, 130) &  (1, 64, 256, 128) &      36,928 \\
+        le\_upsample.2.conv\_block.2 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+        le\_upsample.2.conv\_block.4 &  (1, 64, 256, 128) &  (1, 64, 258, 130) &           0 \\
+        le\_upsample.2.conv\_block.5 &  (1, 64, 258, 130) &  (1, 64, 256, 128) &      36,928 \\
+        le\_upsample.2.conv\_block.6 &  (1, 64, 256, 128) &  (1, 64, 256, 128) &         128 \\
+                    le\_upsample.3 &  (1, 64, 256, 128) &  (1, 32, 512, 256) &      18,464 \\
+                    le\_upsample.4 &  (1, 32, 512, 256) &  (1, 32, 512, 256) &          64 \\
+                    le\_upsample.5 &  (1, 32, 512, 256) &  (1, 32, 512, 256) &           0 \\
+                    le\_upsample.6 &  (1, 32, 512, 256) &  (1, 32, 518, 262) &           0 \\
+                    le\_upsample.7 &  (1, 32, 518, 262) &   (1, 3, 512, 256) &       4,707 \\
+                    le\_upsample.8 &   (1, 3, 512, 256) &   (1, 3, 512, 256) &           0 \\
+                            Model &   [1, 3, 512, 256] &   (1, 3, 512, 256) &  31,709,187 \\
+    \bottomrule
+    \caption{Model Stats of Pix2pixHD Generator generated by tensorwatch}
+    \label{Pix2pixHD generator table}
+\end{longtable}  
+    
+\section{Architecture of Discriminator}
+\begin{table}[H]
+    \begin{tabular}{llll}
+        \toprule
+        module name &        input shape &       output shape & parameters \\
+        \midrule
+        downsample &   (1, 6, 256, 128) &    (1, 6, 128, 64) &          0 \\
+        layer0.0 &    (1, 6, 128, 64) &    (1, 64, 65, 33) &      6,208 \\
+        layer0.1 &    (1, 64, 65, 33) &    (1, 64, 65, 33) &          0 \\
+        layer0.2 &    (1, 64, 65, 33) &   (1, 128, 33, 17) &    131,200 \\
+        layer0.3 &   (1, 128, 33, 17) &   (1, 128, 33, 17) &        256 \\
+        layer0.4 &   (1, 128, 33, 17) &   (1, 128, 33, 17) &          0 \\
+        layer0.5 &   (1, 128, 33, 17) &    (1, 256, 17, 9) &    524,544 \\
+        layer0.6 &    (1, 256, 17, 9) &    (1, 256, 17, 9) &        512 \\
+        layer0.7 &    (1, 256, 17, 9) &    (1, 256, 17, 9) &          0 \\
+        layer0.8 &    (1, 256, 17, 9) &   (1, 512, 18, 10) &  2,097,664 \\
+        layer0.9 &   (1, 512, 18, 10) &   (1, 512, 18, 10) &      1,024 \\
+        layer0.10 &   (1, 512, 18, 10) &   (1, 512, 18, 10) &          0 \\
+        layer0.11 &   (1, 512, 18, 10) &     (1, 1, 19, 11) &      8,193 \\
+        layer1.0 &   (1, 6, 256, 128) &   (1, 64, 129, 65) &      6,208 \\
+        layer1.1 &   (1, 64, 129, 65) &   (1, 64, 129, 65) &          0 \\
+        layer1.2 &   (1, 64, 129, 65) &   (1, 128, 65, 33) &    131,200 \\
+        layer1.3 &   (1, 128, 65, 33) &   (1, 128, 65, 33) &        256 \\
+        layer1.4 &   (1, 128, 65, 33) &   (1, 128, 65, 33) &          0 \\
+        layer1.5 &   (1, 128, 65, 33) &   (1, 256, 33, 17) &    524,544 \\
+        layer1.6 &   (1, 256, 33, 17) &   (1, 256, 33, 17) &        512 \\
+        layer1.7 &   (1, 256, 33, 17) &   (1, 256, 33, 17) &          0 \\
+        layer1.8 &   (1, 256, 33, 17) &   (1, 512, 34, 18) &  2,097,664 \\
+        layer1.9 &   (1, 512, 34, 18) &   (1, 512, 34, 18) &      1,024 \\
+        layer1.10 &   (1, 512, 34, 18) &   (1, 512, 34, 18) &          0 \\
+        layer1.11 &   (1, 512, 34, 18) &     (1, 1, 35, 19) &      8,193 \\
+        layer2.0 &   (1, 6, 512, 256) &  (1, 64, 257, 129) &      6,208 \\
+        layer2.1 &  (1, 64, 257, 129) &  (1, 64, 257, 129) &          0 \\
+        layer2.2 &  (1, 64, 257, 129) &  (1, 128, 129, 65) &    131,200 \\
+        layer2.3 &  (1, 128, 129, 65) &  (1, 128, 129, 65) &        256 \\
+        layer2.4 &  (1, 128, 129, 65) &  (1, 128, 129, 65) &          0 \\
+        layer2.5 &  (1, 128, 129, 65) &   (1, 256, 65, 33) &    524,544 \\
+        layer2.6 &   (1, 256, 65, 33) &   (1, 256, 65, 33) &        512 \\
+        layer2.7 &   (1, 256, 65, 33) &   (1, 256, 65, 33) &          0 \\
+        layer2.8 &   (1, 256, 65, 33) &   (1, 512, 66, 34) &  2,097,664 \\
+        layer2.9 &   (1, 512, 66, 34) &   (1, 512, 66, 34) &      1,024 \\
+        layer2.10 &   (1, 512, 66, 34) &   (1, 512, 66, 34) &          0 \\
+        layer2.11 &   (1, 512, 66, 34) &     (1, 1, 67, 35) &      8,193 \\
+            Model &   [1, 6, 512, 256] &     (1, 1, 67, 35) &  8,308,803 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Model Stats of Pix2pixHD Discriminator generated by tensorwatch}
+    \label{Pix2pixHD discriminator table}
+\end{table}
+    
+\section{Architecture of SPADE Generator}
+\begin{longtable}{llll}
+    \toprule
+                            module name &         input shape &        output shape &   parameters \\
+    \midrule
+                                    fc &            (1, 256) &           (1, 8192) &    2,105,344 \\
+        spadeRes0.spade0.param\_free\_norm &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &            0 \\
+            spadeRes0.spade0.shared\_net.0 &        (1, 3, 4, 2) &      (1, 128, 4, 2) &        3,584 \\
+            spadeRes0.spade0.shared\_net.1 &      (1, 128, 4, 2) &      (1, 128, 4, 2) &            0 \\
+                spadeRes0.spade0.gamma &      (1, 128, 4, 2) &     (1, 1024, 4, 2) &    1,180,672 \\
+                    spadeRes0.spade0.beta &      (1, 128, 4, 2) &     (1, 1024, 4, 2) &    1,180,672 \\
+                        spadeRes0.conv0 &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &    9,438,208 \\
+                        spadeRes0.relu0 &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &            0 \\
+        spadeRes0.spade1.param\_free\_norm &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &            0 \\
+            spadeRes0.spade1.shared\_net.0 &        (1, 3, 4, 2) &      (1, 128, 4, 2) &        3,584 \\
+            spadeRes0.spade1.shared\_net.1 &      (1, 128, 4, 2) &      (1, 128, 4, 2) &            0 \\
+                spadeRes0.spade1.gamma &      (1, 128, 4, 2) &     (1, 1024, 4, 2) &    1,180,672 \\
+                    spadeRes0.spade1.beta &      (1, 128, 4, 2) &     (1, 1024, 4, 2) &    1,180,672 \\
+                        spadeRes0.conv1 &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &    9,438,208 \\
+                        spadeRes0.relu1 &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &            0 \\
+    spadeRes0.spade\_skip.param\_free\_norm &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &            0 \\
+        spadeRes0.spade\_skip.shared\_net.0 &        (1, 3, 4, 2) &      (1, 128, 4, 2) &        3,584 \\
+        spadeRes0.spade\_skip.shared\_net.1 &      (1, 128, 4, 2) &      (1, 128, 4, 2) &            0 \\
+            spadeRes0.spade\_skip.gamma &      (1, 128, 4, 2) &     (1, 1024, 4, 2) &    1,180,672 \\
+                spadeRes0.spade\_skip.beta &      (1, 128, 4, 2) &     (1, 1024, 4, 2) &    1,180,672 \\
+                    spadeRes0.conv\_skip &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &    1,048,576 \\
+                    spadeRes0.relu\_skip &     (1, 1024, 4, 2) &     (1, 1024, 4, 2) &            0 \\
+        spadeRes1.spade0.param\_free\_norm &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &            0 \\
+            spadeRes1.spade0.shared\_net.0 &        (1, 3, 8, 4) &      (1, 128, 8, 4) &        3,584 \\
+            spadeRes1.spade0.shared\_net.1 &      (1, 128, 8, 4) &      (1, 128, 8, 4) &            0 \\
+                spadeRes1.spade0.gamma &      (1, 128, 8, 4) &     (1, 1024, 8, 4) &    1,180,672 \\
+                    spadeRes1.spade0.beta &      (1, 128, 8, 4) &     (1, 1024, 8, 4) &    1,180,672 \\
+                        spadeRes1.conv0 &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &    9,438,208 \\
+                        spadeRes1.relu0 &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &            0 \\
+        spadeRes1.spade1.param\_free\_norm &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &            0 \\
+            spadeRes1.spade1.shared\_net.0 &        (1, 3, 8, 4) &      (1, 128, 8, 4) &        3,584 \\
+            spadeRes1.spade1.shared\_net.1 &      (1, 128, 8, 4) &      (1, 128, 8, 4) &            0 \\
+                spadeRes1.spade1.gamma &      (1, 128, 8, 4) &     (1, 1024, 8, 4) &    1,180,672 \\
+                    spadeRes1.spade1.beta &      (1, 128, 8, 4) &     (1, 1024, 8, 4) &    1,180,672 \\
+                        spadeRes1.conv1 &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &    9,438,208 \\
+                        spadeRes1.relu1 &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &            0 \\
+    spadeRes1.spade\_skip.param\_free\_norm &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &            0 \\
+        spadeRes1.spade\_skip.shared\_net.0 &        (1, 3, 8, 4) &      (1, 128, 8, 4) &        3,584 \\
+        spadeRes1.spade\_skip.shared\_net.1 &      (1, 128, 8, 4) &      (1, 128, 8, 4) &            0 \\
+            spadeRes1.spade\_skip.gamma &      (1, 128, 8, 4) &     (1, 1024, 8, 4) &    1,180,672 \\
+                spadeRes1.spade\_skip.beta &      (1, 128, 8, 4) &     (1, 1024, 8, 4) &    1,180,672 \\
+                    spadeRes1.conv\_skip &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &    1,048,576 \\
+                    spadeRes1.relu\_skip &     (1, 1024, 8, 4) &     (1, 1024, 8, 4) &            0 \\
+        spadeRes2.spade0.param\_free\_norm &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &            0 \\
+            spadeRes2.spade0.shared\_net.0 &       (1, 3, 16, 8) &     (1, 128, 16, 8) &        3,584 \\
+            spadeRes2.spade0.shared\_net.1 &     (1, 128, 16, 8) &     (1, 128, 16, 8) &            0 \\
+                spadeRes2.spade0.gamma &     (1, 128, 16, 8) &    (1, 1024, 16, 8) &    1,180,672 \\
+                    spadeRes2.spade0.beta &     (1, 128, 16, 8) &    (1, 1024, 16, 8) &    1,180,672 \\
+                        spadeRes2.conv0 &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &    9,438,208 \\
+                        spadeRes2.relu0 &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &            0 \\
+        spadeRes2.spade1.param\_free\_norm &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &            0 \\
+            spadeRes2.spade1.shared\_net.0 &       (1, 3, 16, 8) &     (1, 128, 16, 8) &        3,584 \\
+            spadeRes2.spade1.shared\_net.1 &     (1, 128, 16, 8) &     (1, 128, 16, 8) &            0 \\
+                spadeRes2.spade1.gamma &     (1, 128, 16, 8) &    (1, 1024, 16, 8) &    1,180,672 \\
+                    spadeRes2.spade1.beta &     (1, 128, 16, 8) &    (1, 1024, 16, 8) &    1,180,672 \\
+                        spadeRes2.conv1 &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &    9,438,208 \\
+                        spadeRes2.relu1 &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &            0 \\
+    spadeRes2.spade\_skip.param\_free\_norm &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &            0 \\
+        spadeRes2.spade\_skip.shared\_net.0 &       (1, 3, 16, 8) &     (1, 128, 16, 8) &        3,584 \\
+        spadeRes2.spade\_skip.shared\_net.1 &     (1, 128, 16, 8) &     (1, 128, 16, 8) &            0 \\
+            spadeRes2.spade\_skip.gamma &     (1, 128, 16, 8) &    (1, 1024, 16, 8) &    1,180,672 \\
+                spadeRes2.spade\_skip.beta &     (1, 128, 16, 8) &    (1, 1024, 16, 8) &    1,180,672 \\
+                    spadeRes2.conv\_skip &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &    1,048,576 \\
+                    spadeRes2.relu\_skip &    (1, 1024, 16, 8) &    (1, 1024, 16, 8) &            0 \\
+        spadeRes3.spade0.param\_free\_norm &   (1, 1024, 32, 16) &   (1, 1024, 32, 16) &            0 \\
+            spadeRes3.spade0.shared\_net.0 &      (1, 3, 32, 16) &    (1, 128, 32, 16) &        3,584 \\
+            spadeRes3.spade0.shared\_net.1 &    (1, 128, 32, 16) &    (1, 128, 32, 16) &            0 \\
+                spadeRes3.spade0.gamma &    (1, 128, 32, 16) &   (1, 1024, 32, 16) &    1,180,672 \\
+                    spadeRes3.spade0.beta &    (1, 128, 32, 16) &   (1, 1024, 32, 16) &    1,180,672 \\
+                        spadeRes3.conv0 &   (1, 1024, 32, 16) &    (1, 512, 32, 16) &    4,719,104 \\
+                        spadeRes3.relu0 &   (1, 1024, 32, 16) &   (1, 1024, 32, 16) &            0 \\
+        spadeRes3.spade1.param\_free\_norm &    (1, 512, 32, 16) &    (1, 512, 32, 16) &            0 \\
+            spadeRes3.spade1.shared\_net.0 &      (1, 3, 32, 16) &    (1, 128, 32, 16) &        3,584 \\
+            spadeRes3.spade1.shared\_net.1 &    (1, 128, 32, 16) &    (1, 128, 32, 16) &            0 \\
+                spadeRes3.spade1.gamma &    (1, 128, 32, 16) &    (1, 512, 32, 16) &      590,336 \\
+                    spadeRes3.spade1.beta &    (1, 128, 32, 16) &    (1, 512, 32, 16) &      590,336 \\
+                        spadeRes3.conv1 &    (1, 512, 32, 16) &    (1, 512, 32, 16) &    2,359,808 \\
+                        spadeRes3.relu1 &    (1, 512, 32, 16) &    (1, 512, 32, 16) &            0 \\
+    spadeRes3.spade\_skip.param\_free\_norm &   (1, 1024, 32, 16) &   (1, 1024, 32, 16) &            0 \\
+        spadeRes3.spade\_skip.shared\_net.0 &      (1, 3, 32, 16) &    (1, 128, 32, 16) &        3,584 \\
+        spadeRes3.spade\_skip.shared\_net.1 &    (1, 128, 32, 16) &    (1, 128, 32, 16) &            0 \\
+            spadeRes3.spade\_skip.gamma &    (1, 128, 32, 16) &   (1, 1024, 32, 16) &    1,180,672 \\
+                spadeRes3.spade\_skip.beta &    (1, 128, 32, 16) &   (1, 1024, 32, 16) &    1,180,672 \\
+                    spadeRes3.conv\_skip &   (1, 1024, 32, 16) &    (1, 512, 32, 16) &      524,288 \\
+                    spadeRes3.relu\_skip &   (1, 1024, 32, 16) &   (1, 1024, 32, 16) &            0 \\
+        spadeRes4.spade0.param\_free\_norm &    (1, 512, 64, 32) &    (1, 512, 64, 32) &            0 \\
+            spadeRes4.spade0.shared\_net.0 &      (1, 3, 64, 32) &    (1, 128, 64, 32) &        3,584 \\
+            spadeRes4.spade0.shared\_net.1 &    (1, 128, 64, 32) &    (1, 128, 64, 32) &            0 \\
+                spadeRes4.spade0.gamma &    (1, 128, 64, 32) &    (1, 512, 64, 32) &      590,336 \\
+                    spadeRes4.spade0.beta &    (1, 128, 64, 32) &    (1, 512, 64, 32) &      590,336 \\
+                        spadeRes4.conv0 &    (1, 512, 64, 32) &    (1, 256, 64, 32) &    1,179,904 \\
+                        spadeRes4.relu0 &    (1, 512, 64, 32) &    (1, 512, 64, 32) &            0 \\
+        spadeRes4.spade1.param\_free\_norm &    (1, 256, 64, 32) &    (1, 256, 64, 32) &            0 \\
+            spadeRes4.spade1.shared\_net.0 &      (1, 3, 64, 32) &    (1, 128, 64, 32) &        3,584 \\
+            spadeRes4.spade1.shared\_net.1 &    (1, 128, 64, 32) &    (1, 128, 64, 32) &            0 \\
+                spadeRes4.spade1.gamma &    (1, 128, 64, 32) &    (1, 256, 64, 32) &      295,168 \\
+                    spadeRes4.spade1.beta &    (1, 128, 64, 32) &    (1, 256, 64, 32) &      295,168 \\
+                        spadeRes4.conv1 &    (1, 256, 64, 32) &    (1, 256, 64, 32) &      590,080 \\
+                        spadeRes4.relu1 &    (1, 256, 64, 32) &    (1, 256, 64, 32) &            0 \\
+    spadeRes4.spade\_skip.param\_free\_norm &    (1, 512, 64, 32) &    (1, 512, 64, 32) &            0 \\
+        spadeRes4.spade\_skip.shared\_net.0 &      (1, 3, 64, 32) &    (1, 128, 64, 32) &        3,584 \\
+        spadeRes4.spade\_skip.shared\_net.1 &    (1, 128, 64, 32) &    (1, 128, 64, 32) &            0 \\
+            spadeRes4.spade\_skip.gamma &    (1, 128, 64, 32) &    (1, 512, 64, 32) &      590,336 \\
+                spadeRes4.spade\_skip.beta &    (1, 128, 64, 32) &    (1, 512, 64, 32) &      590,336 \\
+                    spadeRes4.conv\_skip &    (1, 512, 64, 32) &    (1, 256, 64, 32) &      131,072 \\
+                    spadeRes4.relu\_skip &    (1, 512, 64, 32) &    (1, 512, 64, 32) &            0 \\
+        spadeRes5.spade0.param\_free\_norm &   (1, 256, 128, 64) &   (1, 256, 128, 64) &            0 \\
+            spadeRes5.spade0.shared\_net.0 &     (1, 3, 128, 64) &   (1, 128, 128, 64) &        3,584 \\
+            spadeRes5.spade0.shared\_net.1 &   (1, 128, 128, 64) &   (1, 128, 128, 64) &            0 \\
+                spadeRes5.spade0.gamma &   (1, 128, 128, 64) &   (1, 256, 128, 64) &      295,168 \\
+                    spadeRes5.spade0.beta &   (1, 128, 128, 64) &   (1, 256, 128, 64) &      295,168 \\
+                        spadeRes5.conv0 &   (1, 256, 128, 64) &   (1, 128, 128, 64) &      295,040 \\
+                        spadeRes5.relu0 &   (1, 256, 128, 64) &   (1, 256, 128, 64) &            0 \\
+        spadeRes5.spade1.param\_free\_norm &   (1, 128, 128, 64) &   (1, 128, 128, 64) &            0 \\
+            spadeRes5.spade1.shared\_net.0 &     (1, 3, 128, 64) &   (1, 128, 128, 64) &        3,584 \\
+            spadeRes5.spade1.shared\_net.1 &   (1, 128, 128, 64) &   (1, 128, 128, 64) &            0 \\
+                spadeRes5.spade1.gamma &   (1, 128, 128, 64) &   (1, 128, 128, 64) &      147,584 \\
+                    spadeRes5.spade1.beta &   (1, 128, 128, 64) &   (1, 128, 128, 64) &      147,584 \\
+                        spadeRes5.conv1 &   (1, 128, 128, 64) &   (1, 128, 128, 64) &      147,584 \\
+                        spadeRes5.relu1 &   (1, 128, 128, 64) &   (1, 128, 128, 64) &            0 \\
+    spadeRes5.spade\_skip.param\_free\_norm &   (1, 256, 128, 64) &   (1, 256, 128, 64) &            0 \\
+        spadeRes5.spade\_skip.shared\_net.0 &     (1, 3, 128, 64) &   (1, 128, 128, 64) &        3,584 \\
+        spadeRes5.spade\_skip.shared\_net.1 &   (1, 128, 128, 64) &   (1, 128, 128, 64) &            0 \\
+            spadeRes5.spade\_skip.gamma &   (1, 128, 128, 64) &   (1, 256, 128, 64) &      295,168 \\
+                spadeRes5.spade\_skip.beta &   (1, 128, 128, 64) &   (1, 256, 128, 64) &      295,168 \\
+                    spadeRes5.conv\_skip &   (1, 256, 128, 64) &   (1, 128, 128, 64) &       32,768 \\
+                    spadeRes5.relu\_skip &   (1, 256, 128, 64) &   (1, 256, 128, 64) &            0 \\
+        spadeRes6.spade0.param\_free\_norm &  (1, 128, 256, 128) &  (1, 128, 256, 128) &            0 \\
+            spadeRes6.spade0.shared\_net.0 &    (1, 3, 256, 128) &  (1, 128, 256, 128) &        3,584 \\
+            spadeRes6.spade0.shared\_net.1 &  (1, 128, 256, 128) &  (1, 128, 256, 128) &            0 \\
+                spadeRes6.spade0.gamma &  (1, 128, 256, 128) &  (1, 128, 256, 128) &      147,584 \\
+                    spadeRes6.spade0.beta &  (1, 128, 256, 128) &  (1, 128, 256, 128) &      147,584 \\
+                        spadeRes6.conv0 &  (1, 128, 256, 128) &   (1, 64, 256, 128) &       73,792 \\
+                        spadeRes6.relu0 &  (1, 128, 256, 128) &  (1, 128, 256, 128) &            0 \\
+        spadeRes6.spade1.param\_free\_norm &   (1, 64, 256, 128) &   (1, 64, 256, 128) &            0 \\
+            spadeRes6.spade1.shared\_net.0 &    (1, 3, 256, 128) &  (1, 128, 256, 128) &        3,584 \\
+            spadeRes6.spade1.shared\_net.1 &  (1, 128, 256, 128) &  (1, 128, 256, 128) &            0 \\
+                spadeRes6.spade1.gamma &  (1, 128, 256, 128) &   (1, 64, 256, 128) &       73,792 \\
+                    spadeRes6.spade1.beta &  (1, 128, 256, 128) &   (1, 64, 256, 128) &       73,792 \\
+                        spadeRes6.conv1 &   (1, 64, 256, 128) &   (1, 64, 256, 128) &       36,928 \\
+                        spadeRes6.relu1 &   (1, 64, 256, 128) &   (1, 64, 256, 128) &            0 \\
+    spadeRes6.spade\_skip.param\_free\_norm &  (1, 128, 256, 128) &  (1, 128, 256, 128) &            0 \\
+        spadeRes6.spade\_skip.shared\_net.0 &    (1, 3, 256, 128) &  (1, 128, 256, 128) &        3,584 \\
+        spadeRes6.spade\_skip.shared\_net.1 &  (1, 128, 256, 128) &  (1, 128, 256, 128) &            0 \\
+            spadeRes6.spade\_skip.gamma &  (1, 128, 256, 128) &  (1, 128, 256, 128) &      147,584 \\
+                spadeRes6.spade\_skip.beta &  (1, 128, 256, 128) &  (1, 128, 256, 128) &      147,584 \\
+                    spadeRes6.conv\_skip &  (1, 128, 256, 128) &   (1, 64, 256, 128) &        8,192 \\
+                    spadeRes6.relu\_skip &  (1, 128, 256, 128) &  (1, 128, 256, 128) &            0 \\
+                                    up &   (1, 64, 256, 128) &   (1, 64, 512, 256) &            0 \\
+                            conv\_final &   (1, 64, 512, 256) &    (1, 3, 512, 256) &        1,731 \\
+                                    Model &    [1, 3, 512, 256] &    (1, 3, 512, 256) &  104,376,771 \\
+    \bottomrule
+    \caption{Model Stats of SPADE generator generated by tensorwatch}
+    \label{SPADE generator table}
+\end{longtable}
+
+% Local Variables: 
+% mode: latex
+% TeX-master: "report"
+% End: 

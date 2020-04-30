@@ -81,6 +81,8 @@
 \usepackage{mathrsfs}            %数学花体
 \usepackage{float}
 \usepackage[colorlinks, linkcolor=black]{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
 
 %% End of preamble, the actual document starts here
 %%
@@ -94,6 +96,11 @@
 \tableofcontents
 \listoffigures
 \listoftables
+
+\hypersetup{
+  colorlinks,
+  linkcolor=red
+}
 
 %% These include the actual text
 \include{chapter1}
@@ -110,5 +117,5 @@
                                 % possible values are plain and abbrv
 %% Appendices start here
 \appendix
-% \include{appendix1}
+\include{appendix}
 \end{document}
