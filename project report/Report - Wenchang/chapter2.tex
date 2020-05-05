@@ -10,10 +10,11 @@ results evaluation.
 \section{Image-to-Image Translation with cGAN}
 Dealing Image-to-Image translation tasks with GANs originated from Isola et al.\cite{pix2pix2016}
 which tries to develop a common framework for all “predict pixels from pixels” problems with 
-conditional GANs, which shows the ability to generate decent $256\times256$ resolution images. 
+conditional GANs, which shows the ability to generate decent $256\times256$ resolution images.
+The following content is referenced from \cite{pix2pix2016}. 
 
 \subsection{Objective Function}
-The objective of our model is to produce photorealistic images that is indistinguishable from the 
+The objective of the model is to produce photorealistic images that is indistinguishable from the 
 real images given input segmentation maps, the cGAN objective function is:
 $$\mathcal{L}_{c G A N}(G, D)=\mathbb{E}_{x, y}[\log D(x, y)]+\mathbb{E}_{x, z}[\log (1-D(x, G(x, z))]$$
 where the generator G tries to minimize the cGAN loss against an adversarial discriminator D that 
@@ -41,18 +42,19 @@ deterministic results and the random noise is not found helpful in terms of the 
 \end{figure}
 
 \subsection{Architecture}
-Both the generator and discriminator use modules of the form [CONV2d-BN-ReLU], 
+Both the generator and discriminator use modules of the form [CONV2D-BN-ReLU], 
 the generator uses a classic encoder-decoder structure where the encoder extracts
 the feature maps from the input segmentation map, and the decoder filled the details 
 to produce a photorealistic output from that feature maps. In addition, sharing 
 low-level information between input and output is helpful for many image translation
-tasks. So in order to shuttle this information across the neural network, the author
+tasks. So, to pass this information throughout the neural network, the author
 adds skip connections following the general structure of a “U-Net”, specifically, we
 try to connect each layer $i$ and corresponding layer $n-i$, where $n$ is the total number
 of layers, and each skip connections simply concatenates all channels at layer $i$ 
 with those at layer $n-i$. For discriminator, the author introduces PatchGAN which 
-tries to classify if each $N \times N$ patch in an image is real or fake, this
-discriminator has fewer parameters, runs faster, and can be applied to larger images.
+tries to classify if each $N \times N$ part in an image is real or fake, this
+discriminator has the advantages of fewer parameters, faster running speed, and 
+the capability of being applied to larger images.
 \begin{figure}[H]
     \begin{center}
     \includegraphics[width=12cm]{figures/pix2pix-generator}
@@ -75,19 +77,21 @@ and here are some example outputs after
     \label{fig:pix2pix-output}
 \end{figure}
 
-The pix2pix model can achieve decent results with limited computation resources on 
-small datasets such as the facade dataset. However, it still cannot produce very
+Based on my experiment results and the example results from the paper, I found the
+Pix2pix model can achieve decent results with limited computation resources on 
+small-scaled datasets such as the facade dataset. However, it still cannot produce very
 clear textures or high-resolution photorealistic images.
 
 \section{State-of-the-art Model — Pix2pixHD}
-Pix2pixHD\cite{wang2018pix2pixHD} is the upgraded version of pix2pix brought by 
+Pix2pixHD is the upgraded version of pix2pix brought by 
 Nvidia which can generate high-resolution images. In the paper they successfully 
 generate $2048\times1024$ resolution images using the Cityscapes benchmark dataset
 \cite{Cordts2016Cityscapes}. The pix2pixHD model is still based on conditional GAN, but
-it makes improvements on the generator, the discriminator, and the loss function.
+it makes improvements on the generator, the discriminator, and the loss function. 
+The following content is referenced from \cite{wang2018pix2pixHD}.
 
 \subsection{Generator}
-Generator G consists of two generators, we term G1 as the global generator and G2 as 
+Generator G consists of two generators, we define G1 as the global generator and G2 as 
 the local enhancer. The global generator plays the similar role as the pix2pix model 
 which is basically an encoder-decoder generator with residual blocks that can output 
 lower resolution($1024\times512$) images, and the local enhancer will augment the 
@@ -113,15 +117,15 @@ local enhancer in the order of their resolutions.
 Discriminator D is upgraded to Multi-scale discriminators, which alleviate the headache that a 
 discriminator needs to have a larger receptive field, i.e. more memory is required, however, we 
 all know that memory is already a scarce resource for deep learning models. Therefore, what a 
-multi-scale discriminator does is to use 3 smaller discriminators that have identical network
-structure but operate at different scales, we named the discriminators as $D_{1}$, $D_{2}$, $D_{3}$ 
+multi-scale discriminator does is to use three smaller discriminators that have identical network
+structure but operate at different scales, we named the discriminators after $D_{1}$, $D_{2}$, $D_{3}$ 
 respectively. $D_{1}$, $D_{2}$ will deal with the real and synthesized images by factor 2 and 4, 
 while $D_{3}$ will deal with the original images. The discriminator that operates at the finest 
 scale will focus on the details of an image, while the discriminator that operates at the largest 
 scale will have the largest receptive field, discriminating the image with a global view. In 
 implementation stages, we can simply add up the three discriminators' objective functions, which makes 
 the learning problem to be:
-$$\min _{G} \max _{D_{1}, D_{2}, D_{3}} \sum_{k=1,2,3} \mathcal{L}_{\mathrm{GAN}}\left(G, D_{k}\right)$$
+$$\min _{G} \max _{D_{1}, D_{2}, D_{3}} \sum_{i=1,2,3} \mathcal{L}_{\mathrm{GAN}}\left(G, D_{i}\right)$$
 
 \subsection{Objective Function}
 The improved adversarial loss consists of: 
@@ -147,7 +151,7 @@ or including VGG loss:
 $$\min _{G}\left(\left(\max _{D_{1}, D_{2}, D_{3}} \sum_{k=1,2,3} \mathcal{L}_{\mathrm{GAN}}\left(G, D_{k}\right)\right)+\lambda\sum_{k=1,2,3} \mathcal{L}_{\mathrm{FM}}\left(G, D_{k}\right) + \lambda \sum_{i=1}^{N} \frac{1}{M_{i}}\left[\left\|F^{(i)}(\mathbf{x})-F^{(i)}(G(\mathbf{s}))\right\|_{1}\right]\right)$$
 
 \section{State-of-the-art Model — SPADE}
-Spatially-adaptive (DE)normalization(SPADE) \cite{park2019SPADE} is another upgraded image-to-image 
+Spatially-adaptive (DE)normalization(SPADE) is another upgraded image-to-image 
 translation model brought by Nvidia, previous designs including pix2pix \cite{pix2pix2016} and 
 pix2pixHD \cite{wang2018pix2pixHD} are based on cGAN structure, which directly feeds the semantic 
 layout as input to the generator network, then the segmentation map is processed through stacks 
@@ -155,13 +159,12 @@ of convolution, batch normalization, residual, non-linearity layers. The paper c
 some semantic information get removed by normalization layers, therefore, they proposed a new 
 normalization layer which can integrate the information of semantic label maps instead of just 
 two trainable parameters in the traditional batch normalization layer. The SPADE borrows the design 
-of objective function and discriminator, so we will mainly discuss the generator upgrades next. 
+of objective function and discriminator, so we will mainly discuss the generator upgrades next.
+The following content is referenced from \cite{park2019SPADE}. 
 \subsection{SPADE Block}
 The SPADE block is the key of SPADE generator, similar to batch normalization, the activation is 
-normalized in the channel-wise manner by the following formula:
-$$\hat{x}_{i}=\frac{x_{i}-\mu}{\sqrt{\sigma^{2}+\epsilon}} \text { and } y_{i}=\gamma \hat{x}_{i}+\beta$$
-Where $x_{i}$ is an activation for the i-th example in the minibatch and $\hat{x}_{i}$ is the output after 
-the process, $\mu$ and $\sigma^{2}$ are the mean value and variance of the activation over the batch.
+normalized in the channel-wise manner by the following formula(explained in section \ref{sec:BN}):
+$$y_{i}=\gamma \hat{x}_{i}+\beta \text { and } \hat{x}_{i}=\frac{x_{i}-\mu}{\sqrt{\sigma^{2}+\epsilon}}$$
 However, in SPADE block, $\gamma$ and $\beta$ are not just 
 trainable parameters anymore, they are determined by the input segmentation map, the SPADE block uses
 a two-layer convolution module that convert an image into values. Since the important parameters in

@@ -29,13 +29,14 @@ Despite these inconveniences, this is the best solution
 I can think of. 
 
 \section{Deep Learning Framework}
-The deep learning framework I choose for this project is PyTorch from Facebook. 
-Pytorch offers tensor computation with strong GPU acceleration and deep neural 
-networks built on a tape-based autograd system and it has become 
-more and more popular in academia recently. Pytorch is friendly to tyros for 
+The deep learning framework I choose for this project is PyTorch from Facebook Inc. 
+Pytorch is the Python implementation of the famous framework Torch, which offers tensor computation 
+with strong GPU acceleration and deep neural networks built on a tape-based autograd system 
+and it has become more and more popular in academia recently. 
+On the one hand, Pytorch is friendly to tyros for 
 you can easily understand what the code is doing and use the predefined 
-frequently used layers such as convolution layers, batch normalization layers, 
-etc. Also, it allows researchers to build deep neural networks with complex 
+frequently-used layers such as convolution layers, batch normalization layers, 
+etc. On the other hand, it allows researchers to build deep neural networks with complex 
 architectures flexibly which is an advantage over popular frameworks like Keras.
 Unlike Tensorflow, Pytorch uses a dynamic computation graph instead 
 of a static computation graph which is beneficial for tweaking and debugging. And 
@@ -47,11 +48,12 @@ which is kind of chaos. For more information about Pytorch please visit
 
 \section{Graphical User Interface}
 I decided to use a web page as the graphical user interface(GUI) for my project.
-Unlike C++ or $C\sharp$, python does not have any powerful desktop application GUI 
+Unlike C++ or $C\sharp$, Python does not have any powerful desktop application GUI 
 frameworks, however, 
-web development tools like Flask and Django for python can easily integrate the Pytorch 
+web development tools like Flask and Django for Python can easily integrate the Pytorch 
 library and can also make use of the front-end technology to make decent-looking 
-GUI. When the user performs an action on the GUI, the front-end will send a request to 
+GUI with their template system. 
+When the user performs an action on the GUI, the front-end will send a request to 
 the back-end, and the Flask framework will handle the request and ask Pytorch model to 
 do the image translation if necessary. 
 
@@ -84,10 +86,13 @@ drawing semantic label maps respectively.
 
 As shown in figure \ref{fig:GUI-testset} and figure \ref{fig:GUI-testset}, 
 the web app offers functionalities including getting next random sample segmentation map from 
-the test dataset, a simple drawing tool for users to draw their own style of segmentation map, 
+the test dataset, a simple drawing tool for users to draw their own segmentation maps, 
 downloading segmentation maps or generated photorealistic images, and translating the segmentation
 map into photorealistic with both pix2pixHD and SPADE model.
 
+The usage is so simple that all you need to do is get the segmentation map 
+at the left(either by sampling from testing set or drawing one), press either of the 
+translate buttons, and the photorealistic image will be appear at the right.
 
 
 % Local Variables: 

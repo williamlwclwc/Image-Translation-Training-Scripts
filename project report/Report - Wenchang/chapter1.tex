@@ -1,38 +1,39 @@
-\chapter{Background}
+\chapter{Introduction and Background}
 \label{cha:intro}
-This chapter contains a brief introduction to the problem of image-to-image translation,
-deep learning and Generative Adversarial Networks. General ideas of these subjects
-are needed for the reader to understand the more complicated concepts introduced in the later
-chapters.
+This chapter briefly introduces the problem of image-to-image translation,
+deep learning and Generative Adversarial Networks. General ideas of these topics
+are very useful for the reader to grasp the more complicated concepts that 
+the report talking about in the later chapters.
 
 \section{Image-to-Image Translation}
 \subsection{Definition}
 Many challenges in computer vision and machine learning can be regarded as “translating” an 
-input image into a corresponding output image. Just as a concept may be expressed in either 
-English or Chinese, a scene may be rendered as an RGB image, a gradient field, an edge map, 
-a segmentation map, etc. In analogy to automatic language translation, we cite the definition
-of automatic image translation from Isola et al. \cite{pix2pix2016}: tasks of translating one 
-possible representation of a scene into another. Researchers have solved some kinds of image 
-translation using separate, special-purpose machinery(e.g. style transfer\cite{gatys2015neural}),
-even if the settings of these problems are always the same: predict pixels from pixels.
+input image into a corresponding output image. As we all know that a concept may be expressed in either 
+English or Chinese, a scene can be represented as various forms including RGB images, gradient fields, 
+edge maps, segmentation maps, etc. Similar to machine translation of languages, we cite the definition
+of image translation from Isola et al.: “tasks of automatically translating
+one possible representation of a scene into another”\cite{pix2pix2016}. Researchers have solved some kinds of image 
+translation using independent, specific-purpose machinery(e.g. style transfer\cite{gatys2015neural}),
+even if the settings of these problems are the same: predict pixels from pixels.
 The models this report discuss (originated from \cite{pix2pix2016})
 make using one common framework for all these problems possible.
 In this project, we will focus on translating 
 semantic segmentation maps into photorealistic images but you can apply these approaches on
-other image translation problems.
+other types of image translation problems.
 
 \subsection{Segmentation Maps}
-In computer vision, image segmentation is often needed in order to simplify or change 
-the representation of an image into something that is more meaningful and easier to analyze, 
+In computer vision, image segmentation is often needed in order to switch to 
+different representations of an image especially to those representations that 
+are more meaningful and simpler for analysis\cite{wikipedia},
 and a lot of deep learning algorithms have been invented to do semantic labeling. Therefore,
 the data this project needs is easy to acquire.
 
 Segmentation maps are also known as semantic label maps, which is a set of segments 
-that collectively cover the entire image. Each of the pixels in a region are similar 
-with respect to the semantic of the image and each region is assigned with a different 
+that collectively cover the entire image\cite{wikipedia}. Each region contains similar pixels 
+in terms of the semantic of the image and each region is assigned with a different 
 color and a semantic label.
 
-The following is an example segmentation map image, where each color represent one type of object:
+The following figure \ref{fig:segmentation-map-example} is an example segmentation map image, where each color represent one type of object:
 \begin{figure}[H]
     \begin{center}
     \includegraphics[width=8cm]{figures/seg-map-eg}
@@ -42,8 +43,8 @@ The following is an example segmentation map image, where each color represent o
 \end{figure}
 
 \subsection{Applications}
-The translation of photorealistic images from sketches is very useful once the technology is 
-mature enough for commercial applications. Designers could get a fast preview of 
+The translation of photorealistic images from sketches will be very useful once this technology
+is mature enough for commercial uses. Designers could get a fast preview of 
 their work not by imagination, but with vivid photorealistic images. For example, 
 game designers can preview the scene, items, or characters they design vividly by drawing 
 just sets of color blocks or edges. Besides, this technology provides opportunities for 
@@ -53,25 +54,25 @@ people who are not good at art to create their own masterpieces.
 \section{Deep Learning}
 \nocite{articleDL}
 \nocite{Goodfellow-et-al-2016}
-Deep learning is part of the broader family of machine learning algorithms, based on
-artificial neural networks and representation learning(i.e. automatically discover 
-representations needed for feature detection or classification from raw data). Learning
-can be supervised, semi-supervised, or unsupervised. Deep learning approaches have widely
-been utilized in fields including computer vision, natural language processing, 
-audio recognition, text filtering, machine translation, image analysis, drug design, etc., 
+Deep learning is a member of the machine learning algorithms family, based on
+artificial neural networks and representation learning\cite{wikipedia}(i.e. automatically discover 
+representations needed for feature detection or classification from raw data). 
+Learning can be supervised, semi-supervised, or unsupervised. Deep learning approaches have widely
+been applied to fields including computer vision(CV), natural language processing(NLP), 
+reinforcement learning(RL), text filtering, machine translation, image synthesis, drug design, etc., 
 where they perform comparably to and in some cases better than human experts.  
 
 \subsection{Neural Networks}
 Artificial neural networks(ANN) are computing systems vaguely inspired by 
-the biological neural networks that constitute animal brains. Neural networks used in deep learning 
+the biological neural networks that constitute animal brains\cite{wikipedia}. Neural networks used in deep learning 
 can be regarded as a parametric approximation function that can map the input A into the output
-B with parameters $\theta$ i.e. $f_{\boldsymbol{\theta}}: A \rightarrow B$. The mapping 
+B with parameters $\omega$ i.e. $f_{\boldsymbol{\omega}}: A \rightarrow B$. The mapping 
 function can gradually get optimized by updating its parameters through raw data and 
 back propagation algorithms. 
 
 The multi-layer architecture of neural networks can achieve complex mappings by composing 
 multiple but simple non-linear functions together.
-In neural network implementations, the input “signal” will pass into each neuron through
+In neural network implementations, the input “signal” will pass into each neuron(or node) through
 connection edges, the output of each neuron is computed by some non-linear function of 
 the sum of its inputs, typically, neurons are aggregated into layers and the “signals”
 travel from the first input layer to the last output layer to produce the final results.
@@ -84,12 +85,12 @@ travel from the first input layer to the last output layer to produce the final 
 \end{figure}
 
 \subsection{Activation Functions}
-The activation function of a node(i.e. neuron) in neural networks defines the output of that node 
+The activation function of a node(i.e. neuron) in neural networks determines the output of that node 
 given an input or set of inputs. Note that only non-linear activation functions allow such networks 
 to compute complex mappings, if we do not use activation function or use linear activation function,
 no matter how many layers we have, we can only result in getting linear mapping functions.
 
-The activation functions this project uses are the following:
+The activation functions this project uses are the following(explanations referenced from \cite{cs231n}):
 \begin{itemize}
     \item Rectified Linear Unit(ReLU)
     
@@ -135,9 +136,9 @@ The activation functions this project uses are the following:
 \end{itemize}
 
 \subsection{Backpropagation}
-Backpropagation(BP) is a widely used algorithm for training neural networks for
+Backpropagation(BP) is a widely used algorithm for neural networks training and
 supervised learning. While training a neural network, there will be a loss function
-$L$ describing how well the current approximation $f_{\boldsymbol{\theta}}$ approximates
+$L$ describing how well the current approximation $f_{\boldsymbol{\omega}}$ approximates
 the correct mapping function by calculate the differences between the output from the 
 neural network and the ground-truth from a training dataset. Then the backpropagation algorithm 
 will try to approximate the correct mapping function by continuing minimizing the loss function, 
@@ -145,21 +146,20 @@ this can be done by computing the gradients of the loss function with respect to
 each weight from each pair of input-output data by the chain rule, 
 computing the gradient one layer at a time, iterating backward from the last layer to 
 the first(in order to avoid redundant computation) and update every parameter 
-${\boldsymbol{\theta}_{i}}$ using 
-$\boldsymbol{\theta}_{i} \leftarrow \boldsymbol{\theta}_{i}-\alpha \frac{\partial L}{\partial \boldsymbol{\theta}_{i}}$
-where $\alpha(>0)$ is the learning rate and $\frac{\partial L}{\partial \boldsymbol{\theta}_{i}}$ is the partial
+${\boldsymbol{\omega}_{i}}$ using 
+$\boldsymbol{\omega}_{i} \leftarrow \boldsymbol{\omega}_{i}-\alpha \frac{\partial L}{\partial \boldsymbol{\omega}_{i}}$
+where $\alpha(>0)$ is the learning rate and $\frac{\partial L}{\partial \boldsymbol{\omega}_{i}}$ is the partial
 derivative(i.e. gradient). Theoretically, the gradient has the direction away from the minimal point, 
 so each time of these updates will make the neural network 
 approximate better by taking a little step in the opposite direction of the gradient, this idea 
 of minimizing the loss function is called gradient descent.
 
 \subsection{Convolutional Neural Network}
-\nocite{cs231n}
 Convolutional Neural Network(CNN) is a popular type of deep neural networks which commonly applied to 
 the computer-vision-related tasks. 
 A typical Convolution block consists of a convolution layer, a pooling layer and a 
 fully-connected layer(exactly the same as regular neural network). A simple pipeline could be:
-[INPUT-CONV2D-ACTIVATION-POOLING-FC], In more detail:
+[INPUT-CONV2D-ACTIVATION-POOLING-FC], In more detail(explanations cited from \cite{cs231n}):
 \begin{itemize}
     \item INPUT [width, height, channels] will hold the raw pixel values of an input image, for example, for MNIST
     would be [28, 28, 1], i.e. 28x28 resolution images with only one channel for the black and white colors.
@@ -193,7 +193,7 @@ use CNN transpose to get the feature maps to photorealistic images.
 \end{figure}
 
 \subsection{Residual Blocks}
-A traditional view of deep learning is that using more layers not necessarily results in better 
+A traditional view of deep learning is that using a deeper network not necessarily results in better 
 performance, in fact, simply stacking too many CNN blocks has been shown to cause a negative effect
 since the gradient can easily shrink to zero. However, the ResNet with residual blocks brought by He et al. 
 \cite{he2015deep} has eliminated this problem. The residual block skip connects between layers which adds
@@ -210,19 +210,20 @@ a shallow network, and when this apply to CNN, a even deeper CNN can be more pow
 \end{figure}
 
 \subsection{Batch Normalization}
+\label{sec:BN}
 Batch Normalization(BN) is a popular technique proposed by Ioffe and Szegedy \cite{ioffe2015batch} recently 
 which alleviates a lot of headaches with properly initializing neural networks by forcing 
 the activations throughout a network 
-to take on a unit gaussian distribution at the beginning of the training. 
-In deep learning, a layer could supply the next layer inputs with a high variance and a mean value far from zero,
-to fix this problem, BN process every data with the equation:
-$$\hat{x}_{i}=\frac{x_{i}-\mu}{\sqrt{\sigma^{2}+\epsilon}} \text { and } y_{i}=\gamma \hat{x}_{i}+\beta$$
-Where $x_{i}$ is an activation for the $i^{th}$ example in the minibatch and $\hat{x}_{i}$ is the output after 
+to take on a unit gaussian distribution at the beginning of the training according to \cite{cs231n}.
+In deep learning, the latter layer could get inputs with a high variance and a mean value far from zero from the previous layer,
+which is not good for stable training, to fix this problem, BN process every data with the equation:
+$$y_{i}=\gamma \hat{x}_{i}+\beta \text { and } \hat{x}_{i}=\frac{x_{i}-\mu}{\sqrt{\sigma^{2}+\epsilon}}$$
+Where $x_{i}$ is an activation for the $i^{th}$ example in the batch and $\hat{x}_{i}$ is the output after 
 the process, $\mu$ and $\sigma^{2}$ are the mean value and variance of the activation over the batch, and
 $\gamma$ and $\beta$ are trainable parameters.
 
 In practice, we usually insert the BN layer between FC and non-linearities.
-It has been shown that BN can make networks more robust to bad 
+It has been shown that BN can make networks more robust to inappropriate
 initialization. In addition, BN can be interpreted as doing preprocessing at every layer of a network, but 
 integrated into the network itself in a differentiable manner, which is why BN is widely used nowadays.
 For more details, please check the referenced paper \cite{ioffe2015batch}.
@@ -251,8 +252,8 @@ automatically learn a loss function for satisfying this goal, which is much more
 \end{figure}
 \subsection{Conditional Generative Adversarial Network}
 Conditional Generative Adversarial Network(cGAN) is a special kind of GAN whose input 
-of the generator is not random noises, but send in a condition image instead, the networks will learn 
-to adapt and adjust their parameters to these additional inputs. For conventional GAN models, 
+of the generator is not only the random noises, but also send in a condition image, the networks will learn 
+to adapt and adjust their parameters to these additional condition inputs. For conventional GAN models, 
 only the input noise can influence the output, however, for cGAN models, the conditional image can 
 also influence the results. In image translation tasks, the encoded segmentation map is the condition 
 we apply to the GAN model. Both pix2pix\cite{pix2pix2016} and pix2pixHD\cite{wang2018pix2pixHD} use 
@@ -269,10 +270,10 @@ this kind of GAN model.
 I decided to go back to Beijing after finishing my presentation of the 3rd year project on 16th March, 
 my flight arrived at Xi'an, China at 23rd March, 
 I had a low fever and was sent to a hospital for further checks, and fortunately, I am OK. 
-After that, I went to quarantine for 14 days at a hotel in Xi'an, and then traveled back to Beijing and 
+After that, I was sent to a hotel and quarantine for 14 days in Xi'an, and then traveled back to Beijing and 
 self-isolate for another 14 days at home according to the policies from the government. Generally speaking, I 
 had quarantine for a month before I can work on my work wholeheartedly. Fortunately, I finished my demonstration 
-before I left and the deadlines of the 3rd year project and other coursework have been extended.
+before I left and the deadlines of the 3rd year project and other coursework have also been extended.
 
 % Everything below here is commented material which is used by the
 % emacs tex support system called auctex. If you're not an emacs user
